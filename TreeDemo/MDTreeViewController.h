@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TreeViewController : UITableViewController
+@interface MDTreeViewController : UITableViewController
 
 @end

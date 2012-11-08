@@ -6,20 +6,19 @@
 //  Copyright (c) 2012 Max Desyatov. All rights reserved.
 //
 
-#import "TreeViewController.h"
+#import "MDTreeViewController.h"
+#import "MDTreeNodeStore.h"
+#import "MDTreeNode.h"
 
-@interface TreeViewController ()
-
-@end
-
-@implementation TreeViewController
+@implementation MDTreeViewController
 
 - (id)init
 {
     self = [super initWithStyle:UITableViewStylePlain];
     if (self)
     {
-
+        for (int i = 0; i < 5; ++i)
+             [[MDTreeNodeStore sharedStore] createItem];
     }
 
     return self;
@@ -55,24 +54,23 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+    return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+    return [[[MDTreeNodeStore sharedStore] allItems] count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell...
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
+
+    MDTreeNode *n = [[[MDTreeNodeStore sharedStore] allItems] objectAtIndex:[indexPath row]];
+
+    [[cell textLabel] setText:[n description]];
     
     return cell;
 }

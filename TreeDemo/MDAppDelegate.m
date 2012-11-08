@@ -7,7 +7,7 @@
 //
 
 #import "MDAppDelegate.h"
-#import "TreeViewController.h"
+#import "MDTreeViewController.h"
 
 @implementation MDAppDelegate
 
@@ -16,7 +16,7 @@
 {
     self.window =
         [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    TreeViewController *treeViewController = [TreeViewController new];
+    MDTreeViewController *treeViewController = [MDTreeViewController new];
     [[self window] setRootViewController:treeViewController];
 
     self.window.backgroundColor = [UIColor whiteColor];
