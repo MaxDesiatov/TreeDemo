@@ -15,7 +15,7 @@
     self = [super init];
     if (self)
     {
-        _title = [NSMutableString stringWithString:@"New Item"];
+        _title = @"New Item";
         _isExpanded = YES;
         _children = [NSMutableArray array];
     }

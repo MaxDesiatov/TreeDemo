@@ -10,7 +10,7 @@
 
 @interface MDTreeNode : NSObject
 
-@property (copy) NSMutableString *title;
+@property (copy) NSString *title;
 @property (strong) NSMutableArray *children;
 @property (weak) MDTreeNode *parent;
 @property (assign) NSUInteger left;

@@ -17,7 +17,10 @@
     self.window =
         [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     MDTreeViewController *treeViewController = [MDTreeViewController new];
-    [[self window] setRootViewController:treeViewController];
+    UINavigationController *navController =
+        [[UINavigationController alloc]
+            initWithRootViewController:treeViewController];
+    [[self window] setRootViewController:navController];
 
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

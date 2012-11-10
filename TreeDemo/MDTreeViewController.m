@@ -9,16 +9,28 @@
 #import "MDTreeViewController.h"
 #import "MDTreeNodeStore.h"
 #import "MDTreeNode.h"
+#import "MDDetailsViewController.h"
+#import "MDTreeViewCell.h"
 
 @implementation MDTreeViewController
 
 - (id)init
 {
-    self = [super initWithStyle:UITableViewStylePlain];
+    self = [super initWithStyle:UITableViewStyleGrouped];
     if (self)
     {
-        for (int i = 0; i < 5; ++i)
-             [[MDTreeNodeStore sharedStore] createItem];
+        UINavigationItem *n = [self navigationItem];
+
+        [n setTitle:@"TreeDemo"];
+
+        UIBarButtonItem *bbi =
+            [[UIBarButtonItem alloc]
+                initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                     target:self
+                                     action:@selector(addNewItem:)];
+        [[self navigationItem] setRightBarButtonItem:bbi];
+
+        [[self navigationItem] setLeftBarButtonItem:[self editButtonItem]];
     }
 
     return self;
@@ -37,11 +49,9 @@
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    UINib *nib = [UINib nibWithNibName:@"MDTreeViewCell" bundle:nil];
+
+    [[self tableView] registerNib:nib forCellReuseIdentifier:@"MDTreeViewCell"];
 }
 
 - (void)didReceiveMemoryWarning
@@ -66,11 +76,21 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
+    MDTreeViewCell *cell =
+        [tableView dequeueReusableCellWithIdentifier:@"MDTreeViewCell"];
 
-    MDTreeNode *n = [[[MDTreeNodeStore sharedStore] allItems] objectAtIndex:[indexPath row]];
+    if (!cell)
+    {
+        cell =
+            [[MDTreeViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                   reuseIdentifier:@"MDTreeViewCell"];
+    }
 
-    [[cell textLabel] setText:[n description]];
+    MDTreeNode *n =
+        [[[MDTreeNodeStore sharedStore] allItems]
+            objectAtIndex:[indexPath row]];
+
+    [[cell nodeTitleField] setText:[n description]];
     
     return cell;
 }
@@ -85,27 +105,6 @@
 */
 
 /*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -116,15 +115,81 @@
 
 #pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (IBAction)addNewItem:(id)sender
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    MDTreeNode *newNode = [[MDTreeNodeStore sharedStore] createItem];
+
+    int lastRow =
+        [[[MDTreeNodeStore sharedStore] allItems] indexOfObject:newNode];
+    NSIndexPath *ip = [NSIndexPath indexPathForRow:lastRow inSection:0];
+
+    [[self tableView] endEditing:YES];
+    [[self tableView] insertRowsAtIndexPaths:[NSArray arrayWithObject:ip]
+                            withRowAnimation:UITableViewRowAnimationTop];
+    [[self tableView] scrollToRowAtIndexPath:ip
+                            atScrollPosition:UITableViewScrollPositionTop
+                                    animated:YES];
+
+    
 }
 
+- (void)tableView:(UITableView *)tableView
+    commitEditingStyle:(UITableViewCellEditingStyle)editingStyle
+     forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        MDTreeNodeStore *store = [MDTreeNodeStore sharedStore];
+        NSArray *items = [store allItems];
+        MDTreeNode *n = [items objectAtIndex:[indexPath row]];
+        [store removeItem:n];
+
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
+                         withRowAnimation:UITableViewRowAnimationLeft];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView
+    moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
+           toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    [[MDTreeNodeStore sharedStore] moveItemAtIndex:[sourceIndexPath row]
+                                           toIndex:[destinationIndexPath row]];
+}
+
+- (void)tableView:(UITableView *)tableView
+    didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)tableView:(UITableView *)tableView
+    accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    MDDetailsViewController *details = [MDDetailsViewController new];
+
+    NSArray *nodes = [[MDTreeNodeStore sharedStore] allItems];
+    MDTreeNode *selectedNode = [nodes objectAtIndex:[indexPath row]];
+    [details setNode:selectedNode];
+
+    [[self navigationController] pushViewController:details animated:YES];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[self tableView] reloadData];
+}
+
+//- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+//{
+//    MDTreeViewCell *cell =
+//        (MDTreeViewCell *)[[self tableView]
+//                                cellForRowAtIndexPath:[NSIndexPath
+//                                                        indexPathForRow:0
+//                                                              inSection:0]];
+//    UITextField *field = [cell nodeTitleField];
+//    [field setEnabled:YES];
+//    [field becomeFirstResponder];
+//}
 @end

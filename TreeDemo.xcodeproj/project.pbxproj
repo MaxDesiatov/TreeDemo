@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D175CB6F164E70D400661645 /* MDTreeViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D175CB6E164E70D400661645 /* MDTreeViewCell.m */; };
+		D175CB71164E72CB00661645 /* MDTreeViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D175CB70164E72CA00661645 /* MDTreeViewCell.xib */; };
 		D1AA0466164C20C20085BD55 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AA0465164C20C20085BD55 /* UIKit.framework */; };
 		D1AA0468164C20C20085BD55 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AA0467164C20C20085BD55 /* Foundation.framework */; };
 		D1AA046A164C20C20085BD55 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AA0469164C20C20085BD55 /* CoreGraphics.framework */; };
@@ -21,6 +23,8 @@
 		D1AA0497164C45940085BD55 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AA0496164C45940085BD55 /* libsqlite3.dylib */; };
 		D1AA049A164C4DAF0085BD55 /* MDTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA0499164C4DAF0085BD55 /* MDTreeNode.m */; };
 		D1AA049D164C628A0085BD55 /* MDTreeNodeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA049C164C628A0085BD55 /* MDTreeNodeStore.m */; };
+		D1E4A566164DABDF00F07A70 /* MDDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E4A564164DABDF00F07A70 /* MDDetailsViewController.m */; };
+		D1E4A567164DABDF00F07A70 /* MDDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1E4A565164DABDF00F07A70 /* MDDetailsViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +52,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D175CB6D164E70D400661645 /* MDTreeViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDTreeViewCell.h; sourceTree = "<group>"; };
+		D175CB6E164E70D400661645 /* MDTreeViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDTreeViewCell.m; sourceTree = "<group>"; };
+		D175CB70164E72CA00661645 /* MDTreeViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MDTreeViewCell.xib; sourceTree = "<group>"; };
 		D1AA0461164C20C20085BD55 /* TreeDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TreeDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1AA0465164C20C20085BD55 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D1AA0467164C20C20085BD55 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -69,6 +76,9 @@
 		D1AA0499164C4DAF0085BD55 /* MDTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDTreeNode.m; sourceTree = "<group>"; };
 		D1AA049B164C628A0085BD55 /* MDTreeNodeStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDTreeNodeStore.h; sourceTree = "<group>"; };
 		D1AA049C164C628A0085BD55 /* MDTreeNodeStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDTreeNodeStore.m; sourceTree = "<group>"; };
+		D1E4A563164DABDF00F07A70 /* MDDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDetailsViewController.h; sourceTree = "<group>"; };
+		D1E4A564164DABDF00F07A70 /* MDDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDDetailsViewController.m; sourceTree = "<group>"; };
+		D1E4A565164DABDF00F07A70 /* MDDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MDDetailsViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,8 +129,14 @@
 		D1AA046B164C20C20085BD55 /* TreeDemo */ = {
 			isa = PBXGroup;
 			children = (
+				D1E4A563164DABDF00F07A70 /* MDDetailsViewController.h */,
+				D1E4A564164DABDF00F07A70 /* MDDetailsViewController.m */,
+				D1E4A565164DABDF00F07A70 /* MDDetailsViewController.xib */,
 				D1AA0482164C32320085BD55 /* MDTreeViewController.h */,
 				D1AA0483164C32320085BD55 /* MDTreeViewController.m */,
+				D175CB70164E72CA00661645 /* MDTreeViewCell.xib */,
+				D175CB6D164E70D400661645 /* MDTreeViewCell.h */,
+				D175CB6E164E70D400661645 /* MDTreeViewCell.m */,
 				D1AA0474164C20C20085BD55 /* MDAppDelegate.h */,
 				D1AA0475164C20C20085BD55 /* MDAppDelegate.m */,
 				D1AA046C164C20C20085BD55 /* Supporting Files */,
@@ -235,6 +251,8 @@
 				D1AA0478164C20C20085BD55 /* Default.png in Resources */,
 				D1AA047A164C20C20085BD55 /* Default@2x.png in Resources */,
 				D1AA047C164C20C20085BD55 /* Default-568h@2x.png in Resources */,
+				D1E4A567164DABDF00F07A70 /* MDDetailsViewController.xib in Resources */,
+				D175CB71164E72CB00661645 /* MDTreeViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,6 +268,8 @@
 				D1AA0484164C32320085BD55 /* MDTreeViewController.m in Sources */,
 				D1AA049A164C4DAF0085BD55 /* MDTreeNode.m in Sources */,
 				D1AA049D164C628A0085BD55 /* MDTreeNodeStore.m in Sources */,
+				D1E4A566164DABDF00F07A70 /* MDDetailsViewController.m in Sources */,
+				D175CB6F164E70D400661645 /* MDTreeViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,6 +404,7 @@
 				D1AA0481164C20C20085BD55 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

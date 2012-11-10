@@ -31,24 +31,39 @@
     self = [super init];
     if (self)
     {
-        rootNodes = [NSMutableArray new];
+        rootNode = [MDTreeNode new];
     }
 
     return self;
 }
 
+- (void)removeItem:(MDTreeNode *)n
+{
+    [[rootNode children] removeObjectIdenticalTo:n];
+}
+
 - (NSArray *)allItems
 {
-    return rootNodes;
+    return [rootNode children];
 }
 
 - (MDTreeNode *)createItem
 {
     MDTreeNode *n = [MDTreeNode new];
     
-    [rootNodes addObject:n];
+    [[rootNode children] insertObject:n atIndex:0];
 
     return n;
+}
+
+- (void)moveItemAtIndex:(int)from toIndex:(int)to
+{
+    if (from == to)
+        return;
+
+    MDTreeNode *n = [[rootNode children] objectAtIndex:from];
+    [[rootNode children] removeObjectAtIndex:from];
+    [[rootNode children] insertObject:n atIndex:to];
 }
 
 @end

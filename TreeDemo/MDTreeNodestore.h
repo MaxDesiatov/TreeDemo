@@ -12,12 +12,14 @@
 
 @interface MDTreeNodeStore : NSObject
 {
-    NSMutableArray *rootNodes;
+    MDTreeNode *rootNode;
 }
 
 + (MDTreeNodeStore *) sharedStore;
 
+- (void)removeItem:(MDTreeNode *)n;
 - (NSArray *)allItems;
 - (MDTreeNode *)createItem;
+- (void)moveItemAtIndex:(int)from toIndex:(int)to;
 
 @end
