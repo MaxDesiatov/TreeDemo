@@ -17,4 +17,6 @@
 @property (assign) NSUInteger right;
 @property (assign) BOOL isExpanded;
 
+- (NSArray *)flatten;
+
 @end

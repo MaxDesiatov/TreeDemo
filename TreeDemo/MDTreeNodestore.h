@@ -21,5 +21,8 @@
 - (NSArray *)allItems;
 - (MDTreeNode *)createItem;
 - (void)moveItemAtIndex:(int)from toIndex:(int)to;
+- (MDTreeNode *)createChildIn:(MDTreeNode *)node;
+- (MDTreeNode *)createChildIn:(MDTreeNode *)node
+                   atPosition:(NSUInteger)position;
 
 @end

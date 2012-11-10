@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface MDTreeViewCell : UITableViewCell
+{
+    BOOL needsAdditionalIndentation;
+}
 
 @property (weak, nonatomic) IBOutlet UIView *nodeStateIndicator;
 @property (weak, nonatomic) IBOutlet UITextField *nodeTitleField;

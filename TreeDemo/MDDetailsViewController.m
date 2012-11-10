@@ -32,6 +32,8 @@
 
 - (IBAction)addChild:(id)sender
 {
+    [[MDTreeNodeStore sharedStore] createChildIn:_node];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (IBAction)deleteNode:(id)sender

@@ -18,6 +18,7 @@
         _title = @"New Item";
         _isExpanded = YES;
         _children = [NSMutableArray array];
+        _parent = nil;
     }
 
     return self;
@@ -26,6 +27,18 @@
 - (NSString *)description
 {
     return _title;
+}
+
+- (NSArray *)flatten
+{
+    NSMutableArray *result = [NSMutableArray array];
+    for (MDTreeNode *node in _children)
+    {
+        [result addObject:node];
+        [result addObjectsFromArray:[node flatten]];
+    }
+
+    return result;
 }
 
 @end

@@ -89,10 +89,30 @@
     MDTreeNode *n =
         [[[MDTreeNodeStore sharedStore] allItems]
             objectAtIndex:[indexPath row]];
-
-    [[cell nodeTitleField] setText:[n description]];
     
+    [[cell nodeTitleField] setText:[n description]];
+    cell.indentationWidth = 32;
     return cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView
+    indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    MDTreeNode *n =
+        [[[MDTreeNodeStore sharedStore] allItems]
+            objectAtIndex:[indexPath row]];
+
+    NSInteger result = -1;
+
+    while (n && n.parent)
+    {
+        ++result;
+        n = n.parent;
+    }
+
+    NSLog(@"returning indentation %d for row %d", result, [indexPath row]);
+
+    return result;
 }
 
 /*
@@ -142,19 +162,79 @@
         MDTreeNodeStore *store = [MDTreeNodeStore sharedStore];
         NSArray *items = [store allItems];
         MDTreeNode *n = [items objectAtIndex:[indexPath row]];
-        [store removeItem:n];
+        NSLog(@"deleting row %d", [indexPath row]);
 
+        NSArray *childrenToReload = [n flatten];
+        [store removeItem:n];
+        
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
-                         withRowAnimation:UITableViewRowAnimationLeft];
+                         withRowAnimation:UITableViewRowAnimationFade];
+
+        NSMutableArray *indexPathsToReload = [NSMutableArray array];
+        // reloading all items to get refreshed indexes
+        items = [store allItems];
+        for (MDTreeNode *nodeToReload in childrenToReload)
+        {
+            NSUInteger index = [items indexOfObjectIdenticalTo:nodeToReload];
+
+            [indexPathsToReload addObject:[NSIndexPath indexPathForRow:index
+                                                             inSection:0]];
+        }
+
+        [tableView beginUpdates];
+        [tableView reloadRowsAtIndexPaths:indexPathsToReload
+                         withRowAnimation:UITableViewRowAnimationFade];
+        [tableView endUpdates];
     }
 }
 
+//- (void)tableView:(UITableView *)tableView
+//    targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)oldPath
+//                         toProposedIndexPath:(NSIndexPath *)newPath
+//{
+////    [[MDTreeNodeStore sharedStore] moveItemAtIndex:[oldPath row]
+////                                           toIndex:[newPath row]];
+//
+//    NSMutableArray *indexPathsToReload =
+//        [NSMutableArray arrayWithObject:oldPath];
+//    [tableView beginUpdates];
+//    [tableView reloadRowsAtIndexPaths:indexPathsToReload
+//                     withRowAnimation:UITableViewRowAnimationFade];
+//    [tableView endUpdates];
+//
+//}
+
 - (void)tableView:(UITableView *)tableView
-    moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
-           toIndexPath:(NSIndexPath *)destinationIndexPath
+    moveRowAtIndexPath:(NSIndexPath *)oldPath
+           toIndexPath:(NSIndexPath *)newPath
 {
-    [[MDTreeNodeStore sharedStore] moveItemAtIndex:[sourceIndexPath row]
-                                           toIndex:[destinationIndexPath row]];
+    MDTreeNodeStore *store = [MDTreeNodeStore sharedStore];
+    NSArray *items = [store allItems];
+    MDTreeNode *n = [items objectAtIndex:[oldPath row]];
+    NSArray *childrenToReload = [n flatten];
+
+    [[MDTreeNodeStore sharedStore] moveItemAtIndex:[oldPath row]
+                                           toIndex:[newPath row]];
+    UITableViewCell *cell =
+        [[self tableView] cellForRowAtIndexPath:oldPath];
+    [cell setIndentationLevel:[self tableView:[self tableView]
+            indentationLevelForRowAtIndexPath:newPath]];
+    [cell layoutIfNeeded];
+
+    // reloading all items to get refreshed indexes
+    items = [store allItems];
+    for (MDTreeNode *nodeToReload in childrenToReload)
+    {
+        NSUInteger row = [items indexOfObjectIdenticalTo:nodeToReload];
+        NSIndexPath *indexPathToUpdate =
+            [NSIndexPath indexPathForRow:row inSection:0];
+
+        UITableViewCell *cell =
+            [[self tableView] cellForRowAtIndexPath:indexPathToUpdate];
+        [cell setIndentationLevel:[self tableView:[self tableView]
+                indentationLevelForRowAtIndexPath:indexPathToUpdate]];
+        [cell layoutIfNeeded];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView
@@ -192,4 +272,5 @@
 //    [field setEnabled:YES];
 //    [field becomeFirstResponder];
 //}
+
 @end

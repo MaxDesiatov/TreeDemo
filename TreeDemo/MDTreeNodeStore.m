@@ -30,28 +30,67 @@
 {
     self = [super init];
     if (self)
-    {
         rootNode = [MDTreeNode new];
-    }
-
+    
     return self;
 }
 
 - (void)removeItem:(MDTreeNode *)n
 {
-    [[rootNode children] removeObjectIdenticalTo:n];
+    MDTreeNode *parent = [n parent];
+
+    // prevent deletion of the rootNode
+    NSAssert(parent, @"MDTreeNodeStore's -removeItem: there was an attempt to \
+             remove the root node");
+
+    NSMutableArray *parentsChildren = [parent children];
+    NSUInteger nodesIndexInParent =
+        [parentsChildren indexOfObjectIdenticalTo:n];
+    [parentsChildren removeObjectIdenticalTo:n];
+    NSArray *childrenToReparent = [n children];
+    __block NSMutableIndexSet *newIndexesOfChildrenToReparent =
+        [NSMutableIndexSet indexSet];
+
+    [childrenToReparent enumerateObjectsUsingBlock:^(id obj,
+                                                     NSUInteger idx,
+                                                     BOOL *stop)
+    {
+        [newIndexesOfChildrenToReparent addIndex:(nodesIndexInParent + idx)];
+
+        [obj setParent:parent];
+    }];
+
+    [parentsChildren insertObjects:childrenToReparent
+                         atIndexes:newIndexesOfChildrenToReparent];
 }
 
 - (NSArray *)allItems
 {
-    return [rootNode children];
+    return [rootNode flatten];
 }
 
 - (MDTreeNode *)createItem
 {
     MDTreeNode *n = [MDTreeNode new];
-    
+
+    [n setParent:rootNode];
     [[rootNode children] insertObject:n atIndex:0];
+
+    return n;
+}
+
+- (MDTreeNode *)createChildIn:(MDTreeNode *)node
+{
+    return [self createChildIn:node atPosition:0];
+}
+
+- (MDTreeNode *)createChildIn:(MDTreeNode *)node
+                   atPosition:(NSUInteger)position
+{
+    MDTreeNode *n = [MDTreeNode new];
+
+    [n setParent:node];
+    [[node children] insertObject:n atIndex:position];
 
     return n;
 }
@@ -61,9 +100,16 @@
     if (from == to)
         return;
 
-    MDTreeNode *n = [[rootNode children] objectAtIndex:from];
-    [[rootNode children] removeObjectAtIndex:from];
-    [[rootNode children] insertObject:n atIndex:to];
+    NSArray *items = [self allItems];
+    MDTreeNode *oldNode = [items objectAtIndex:from];
+    MDTreeNode *targetNode = [items objectAtIndex:to];
+    NSString *title = [oldNode title];
+    MDTreeNode *newParent = [targetNode parent];
+    NSUInteger targetPosition =
+        [[newParent children] indexOfObjectIdenticalTo:targetNode];
+    [self removeItem:oldNode];
+
+    [[self createChildIn:newParent atPosition:targetPosition] setTitle: title];
 }
 
 @end
