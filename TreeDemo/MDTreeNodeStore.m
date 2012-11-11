@@ -30,12 +30,18 @@
 {
     self = [super init];
     if (self)
-        rootNode = [MDTreeNode new];
+    {
+        NSString *path = [self nodesArchivePath];
+        rootNode = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+
+        if (!rootNode)
+            rootNode = [MDTreeNode new];
+    }
     
     return self;
 }
 
-- (void)removeItem:(MDTreeNode *)n
+- (void)removeNode:(MDTreeNode *)n
 {
     MDTreeNode *parent = [n parent];
 
@@ -64,7 +70,7 @@
                          atIndexes:newIndexesOfChildrenToReparent];
 }
 
-- (void)removeItemWithChildren:(MDTreeNode *)n
+- (void)removeNodeWithChildren:(MDTreeNode *)n
 {
     MDTreeNode *parent = [n parent];
 
@@ -77,12 +83,12 @@
     n = nil;
 }
 
-- (NSArray *)allItems
+- (NSArray *)allNodes
 {
     return [rootNode flatten];
 }
 
-- (MDTreeNode *)createItem
+- (MDTreeNode *)createNode
 {
     MDTreeNode *n = [MDTreeNode new];
 
@@ -117,13 +123,13 @@
     return newChild;
 }
 
-- (void)moveItemAtRow:(int)from toIndex:(int)to
+- (void)moveNodeAtRow:(int)from toRow:(int)to
 {
     if (from == to)
         return;
 
     NSLog(@"-moveItemAtRow invoked to move from row %d to row %d", from, to);
-    NSArray *items = [self allItems];
+    NSArray *items = [self allNodes];
     MDTreeNode *oldNode = [items objectAtIndex:from];
     MDTreeNode *targetNode =
         [items count] > to ? [items objectAtIndex:to] : nil;
@@ -138,7 +144,7 @@
     NSLog(@"-moveItemAtRow: newParentRow is %d and newParent has %d children",
           newParentRow, [[newParent children] count]);
         
-    [self removeItem:oldNode];
+    [self removeNode:oldNode];
 
     int childCount = [[newParent children] count];
     int positionToPut = (to - newParentRow);
@@ -153,13 +159,13 @@
                 setTitle:title];
 }
 
-- (void)moveItemAtRowWithChildren:(int)from toIndex:(int)to
+- (void)moveNodeAtRowWithChildren:(int)from toRow:(int)to
 {
     if (from == to)
         return;
 
     NSLog(@"-moveItemAtRow invoked to move from row %d to row %d", from, to);
-    NSArray *items = [self allItems];
+    NSArray *items = [self allNodes];
     MDTreeNode *node = [items objectAtIndex:from];
 
     MDTreeNode *oldParent = [node parent];
@@ -190,6 +196,24 @@
                                                         childCount :
                                                         positionToPut)];
     [node setParent:newParent];
+}
+
+- (NSString *)nodesArchivePath
+{
+    NSArray *documentDirectories =
+        NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                            NSUserDomainMask, YES);
+
+    NSString *documentDirectory = [documentDirectories objectAtIndex:0];
+
+    return [documentDirectory stringByAppendingPathComponent:@"items.archive"];
+}
+
+- (BOOL)saveChanges
+{
+    NSString *path = [self nodesArchivePath];
+
+    return [NSKeyedArchiver archiveRootObject:rootNode toFile:path];
 }
 
 @end

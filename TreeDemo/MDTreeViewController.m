@@ -70,7 +70,7 @@
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    return [[[MDTreeNodeStore sharedStore] allItems] count];
+    return [[[MDTreeNodeStore sharedStore] allNodes] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -87,7 +87,7 @@
     }
 
     MDTreeNode *n =
-        [[[MDTreeNodeStore sharedStore] allItems]
+        [[[MDTreeNodeStore sharedStore] allNodes]
             objectAtIndex:[indexPath row]];
     
     [[cell nodeTitleField] setText:[n description]];
@@ -102,9 +102,7 @@
 - (NSInteger)tableView:(UITableView *)tableView
     indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray *items = [[MDTreeNodeStore sharedStore] allItems];
-//    NSLog(@"-indentationLevelForRowAtIndexPath invoked and we have %d items \
-//          and calculating indentation for row %d", [items count], [indexPath row]);
+    NSArray *items = [[MDTreeNodeStore sharedStore] allNodes];
     MDTreeNode *n = [items objectAtIndex:[indexPath row]];
 
     NSInteger result = -1;
@@ -115,8 +113,6 @@
         n = n.parent;
     }
 
-//    NSLog(@"returning indentation %d for row %d", result, [indexPath row]);
-
     return result;
 }
 
@@ -124,10 +120,10 @@
 
 - (IBAction)addNewItem:(id)sender
 {
-    MDTreeNode *newNode = [[MDTreeNodeStore sharedStore] createItem];
+    MDTreeNode *newNode = [[MDTreeNodeStore sharedStore] createNode];
 
     int lastRow =
-        [[[MDTreeNodeStore sharedStore] allItems] indexOfObject:newNode];
+        [[[MDTreeNodeStore sharedStore] allNodes] indexOfObject:newNode];
     NSIndexPath *ip = [NSIndexPath indexPathForRow:lastRow inSection:0];
 
     [[self tableView] endEditing:YES];
@@ -145,7 +141,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
         MDTreeNodeStore *store = [MDTreeNodeStore sharedStore];
-        NSArray *items = [store allItems];
+        NSArray *items = [store allNodes];
         MDTreeNode *n = [items objectAtIndex:[indexPath row]];
         NSLog(@"deleting row %d", [indexPath row]);
         MDTreeViewCell *cell =
@@ -158,9 +154,9 @@
         if ([cell isExpanded])
         {
             childrenToReload = [n flatten];
-            [store removeItem:n];
+            [store removeNode:n];
         } else
-            [store removeItemWithChildren:n];
+            [store removeNodeWithChildren:n];
         
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                          withRowAnimation:UITableViewRowAnimationFade];
@@ -171,7 +167,7 @@
 
         NSMutableArray *indexPathsToReload = [NSMutableArray array];
         // reloading all items to get refreshed indexes
-        items = [store allItems];
+        items = [store allNodes];
         for (MDTreeNode *nodeToReload in childrenToReload)
         {
             NSUInteger index = [items indexOfObjectIdenticalTo:nodeToReload];
@@ -192,7 +188,7 @@
            toIndexPath:(NSIndexPath *)newPath
 {
     MDTreeNodeStore *store = [MDTreeNodeStore sharedStore];
-    NSArray *items = [store allItems];
+    NSArray *items = [store allNodes];
     MDTreeNode *n = [items objectAtIndex:[oldPath row]];
     MDTreeViewCell *cell =
         (MDTreeViewCell *)[tableView cellForRowAtIndexPath:oldPath];
@@ -209,9 +205,9 @@
     NSInteger newRow = [newPath row];
 
     if (![cell isExpanded])
-        [store moveItemAtRowWithChildren:oldRow toIndex:newRow];
+        [store moveNodeAtRowWithChildren:oldRow toRow:newRow];
     else
-        [store moveItemAtRow:oldRow toIndex:newRow];
+        [store moveNodeAtRow:oldRow toRow:newRow];
 
     [cell setIndentationLevel:[self tableView:[self tableView]
             indentationLevelForRowAtIndexPath:newPath]];
@@ -222,7 +218,7 @@
         return;
 
     // reloading all items to get refreshed indexes
-    items = [store allItems];
+    items = [store allNodes];
     for (MDTreeNode *nodeToReload in childrenToReload)
     {
         NSUInteger row = [items indexOfObjectIdenticalTo:nodeToReload];
@@ -242,7 +238,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    NSArray *nodes = [[MDTreeNodeStore sharedStore] allItems];
+    NSArray *nodes = [[MDTreeNodeStore sharedStore] allNodes];
     MDTreeNode *selectedNode = [nodes objectAtIndex:[indexPath row]];
     if ([[selectedNode children] count] < 1)
         return;
@@ -279,7 +275,7 @@
         NSArray *flattenedChildren = [selectedNode flatten];
         NSMutableArray *rowsToInsert = [NSMutableArray array];
         // refreshing list of all nodes after expand
-        nodes = [[MDTreeNodeStore sharedStore] allItems];
+        nodes = [[MDTreeNodeStore sharedStore] allNodes];
 
         for (MDTreeNode *child in flattenedChildren)
         {
@@ -301,7 +297,7 @@
 {
     MDDetailsViewController *details = [MDDetailsViewController new];
 
-    NSArray *nodes = [[MDTreeNodeStore sharedStore] allItems];
+    NSArray *nodes = [[MDTreeNodeStore sharedStore] allNodes];
     MDTreeNode *selectedNode = [nodes objectAtIndex:[indexPath row]];
     [details setNode:selectedNode];
 
@@ -312,6 +308,16 @@
 {
     [super viewWillAppear:animated];
     [[self tableView] reloadData];
+}
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animate
+{
+    [super setEditing:editing animated:animate];
+    // forcing reload of data source to avoid any bugs connected with reordering
+    // in view and data source not synchronized.  as a side effect, it ends
+    // editing without cute animation
+    if (!editing)
+        [[self tableView] reloadData];
 }
 
 @end

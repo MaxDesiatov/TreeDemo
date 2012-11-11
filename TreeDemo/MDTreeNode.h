@@ -8,13 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MDTreeNode : NSObject
+@interface MDTreeNode : NSObject <NSCoding>
 
 @property (copy) NSString *title;
 @property (strong) NSMutableArray *children;
 @property (weak) MDTreeNode *parent;
-@property (assign) NSUInteger left;
-@property (assign) NSUInteger right;
 @property (assign) BOOL isExpanded;
 
 - (NSArray *)flatten;

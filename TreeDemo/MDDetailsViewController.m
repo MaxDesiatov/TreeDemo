@@ -38,7 +38,7 @@
 
 - (IBAction)deleteNode:(id)sender
 {
-    [[MDTreeNodeStore sharedStore] removeItem:_node];
+    [[MDTreeNodeStore sharedStore] removeNode:_node];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

@@ -17,14 +17,16 @@
 
 + (MDTreeNodeStore *) sharedStore;
 
-- (void)removeItem:(MDTreeNode *)n;
-- (void)removeItemWithChildren:(MDTreeNode *)n;
-- (NSArray *)allItems;
-- (MDTreeNode *)createItem;
-- (void)moveItemAtRow:(int)from toIndex:(int)to;
-- (void)moveItemAtRowWithChildren:(int)from toIndex:(int)to;
+- (void)removeNode:(MDTreeNode *)n;
+- (void)removeNodeWithChildren:(MDTreeNode *)n;
+- (NSArray *)allNodes;
+- (MDTreeNode *)createNode;
+- (void)moveNodeAtRow:(int)from toRow:(int)to;
+- (void)moveNodeAtRowWithChildren:(int)from toRow:(int)to;
 - (MDTreeNode *)createChildIn:(MDTreeNode *)node;
 - (MDTreeNode *)createChildIn:(MDTreeNode *)node
                    atPosition:(NSUInteger)position;
+- (NSString *)nodesArchivePath;
+- (BOOL)saveChanges;
 
 @end
