@@ -10,4 +10,7 @@ KNOWN ISSUES:
     * reordering children of the same parent doesn't always preserve order of
       children.  This is an inherent problem "making a tree control from a table
       control" approach.  I guess it's better to implement a tree view basing on 
-      a Collection View, which was introduced in iOS 6.  
+      a Collection View, which was introduced in iOS 6.
+      
+Application icon is CC Attribution-Noncommercial-No Derivative Works 3.0 
+taken from here http://www.1000vectors.com/download-icons-free/application-icons/upojenie-iphone-ipod-icon-set.htm
