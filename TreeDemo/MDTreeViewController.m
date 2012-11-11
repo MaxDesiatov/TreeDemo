@@ -83,7 +83,7 @@
     {
         cell =
             [[MDTreeViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                   reuseIdentifier:@"MDTreeViewCell"];
+                                  reuseIdentifier:@"MDTreeViewCell"];
     }
 
     MDTreeNode *n =
@@ -91,16 +91,21 @@
             objectAtIndex:[indexPath row]];
     
     [[cell nodeTitleField] setText:[n description]];
-    cell.indentationWidth = 32;
+    [cell setIndentationWidth:32];
+    [cell setIsExpanded:[n isExpanded]];
+    [cell setHasChildren:([[n children] count] > 0)];
+    [cell prepareForReuse];
+    
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView
     indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MDTreeNode *n =
-        [[[MDTreeNodeStore sharedStore] allItems]
-            objectAtIndex:[indexPath row]];
+    NSArray *items = [[MDTreeNodeStore sharedStore] allItems];
+//    NSLog(@"-indentationLevelForRowAtIndexPath invoked and we have %d items \
+//          and calculating indentation for row %d", [items count], [indexPath row]);
+    MDTreeNode *n = [items objectAtIndex:[indexPath row]];
 
     NSInteger result = -1;
 
@@ -110,28 +115,10 @@
         n = n.parent;
     }
 
-    NSLog(@"returning indentation %d for row %d", result, [indexPath row]);
+//    NSLog(@"returning indentation %d for row %d", result, [indexPath row]);
 
     return result;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
@@ -149,8 +136,6 @@
     [[self tableView] scrollToRowAtIndexPath:ip
                             atScrollPosition:UITableViewScrollPositionTop
                                     animated:YES];
-
-    
 }
 
 - (void)tableView:(UITableView *)tableView
@@ -188,22 +173,6 @@
     }
 }
 
-//- (void)tableView:(UITableView *)tableView
-//    targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)oldPath
-//                         toProposedIndexPath:(NSIndexPath *)newPath
-//{
-////    [[MDTreeNodeStore sharedStore] moveItemAtIndex:[oldPath row]
-////                                           toIndex:[newPath row]];
-//
-//    NSMutableArray *indexPathsToReload =
-//        [NSMutableArray arrayWithObject:oldPath];
-//    [tableView beginUpdates];
-//    [tableView reloadRowsAtIndexPaths:indexPathsToReload
-//                     withRowAnimation:UITableViewRowAnimationFade];
-//    [tableView endUpdates];
-//
-//}
-
 - (void)tableView:(UITableView *)tableView
     moveRowAtIndexPath:(NSIndexPath *)oldPath
            toIndexPath:(NSIndexPath *)newPath
@@ -213,13 +182,13 @@
     MDTreeNode *n = [items objectAtIndex:[oldPath row]];
     NSArray *childrenToReload = [n flatten];
 
-    [[MDTreeNodeStore sharedStore] moveItemAtIndex:[oldPath row]
-                                           toIndex:[newPath row]];
+    [[MDTreeNodeStore sharedStore] moveItemAtRow:[oldPath row]
+                                         toIndex:[newPath row]];
     UITableViewCell *cell =
         [[self tableView] cellForRowAtIndexPath:oldPath];
     [cell setIndentationLevel:[self tableView:[self tableView]
             indentationLevelForRowAtIndexPath:newPath]];
-    [cell layoutIfNeeded];
+    [cell setNeedsLayout];
 
     // reloading all items to get refreshed indexes
     items = [store allItems];
@@ -233,7 +202,7 @@
             [[self tableView] cellForRowAtIndexPath:indexPathToUpdate];
         [cell setIndentationLevel:[self tableView:[self tableView]
                 indentationLevelForRowAtIndexPath:indexPathToUpdate]];
-        [cell layoutIfNeeded];
+        [cell setNeedsLayout];
     }
 }
 
@@ -241,6 +210,59 @@
     didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    NSArray *nodes = [[MDTreeNodeStore sharedStore] allItems];
+    MDTreeNode *selectedNode = [nodes objectAtIndex:[indexPath row]];
+    if ([[selectedNode children] count] < 1)
+        return;
+
+    MDTreeViewCell *cell =
+        (MDTreeViewCell *)[[self tableView] cellForRowAtIndexPath:indexPath];
+    [cell spinNodeStateIndicatorWithDuration:0.25];
+    
+    BOOL oldIsExpanded = [selectedNode isExpanded];
+
+    if (oldIsExpanded)
+    {
+        NSArray *flattenedChildren = [selectedNode flatten];
+        NSMutableArray *rowsToDelete = [NSMutableArray array];
+
+        for (MDTreeNode *child in flattenedChildren)
+        {
+            NSUInteger row = [nodes indexOfObjectIdenticalTo:child];
+            NSIndexPath *ip = [NSIndexPath indexPathForRow:row inSection:0];
+            [rowsToDelete addObject:ip];
+        }
+
+        [selectedNode setIsExpanded:!oldIsExpanded];
+        [cell setIsExpanded:!oldIsExpanded];
+        [tableView beginUpdates];
+        [tableView deleteRowsAtIndexPaths:rowsToDelete
+                         withRowAnimation:UITableViewRowAnimationTop];
+        [tableView endUpdates];
+    } else
+    {
+        [selectedNode setIsExpanded:!oldIsExpanded];
+        [cell setIsExpanded:!oldIsExpanded];
+        
+        NSArray *flattenedChildren = [selectedNode flatten];
+        NSMutableArray *rowsToInsert = [NSMutableArray array];
+        // refreshing list of all nodes after expand
+        nodes = [[MDTreeNodeStore sharedStore] allItems];
+
+        for (MDTreeNode *child in flattenedChildren)
+        {
+            NSUInteger row = [nodes indexOfObjectIdenticalTo:child];
+            NSIndexPath *ip = [NSIndexPath indexPathForRow:row inSection:0];
+            [rowsToInsert addObject:ip];
+        }
+        
+        [tableView beginUpdates];
+        [tableView insertRowsAtIndexPaths:rowsToInsert
+                         withRowAnimation:UITableViewRowAnimationBottom];
+        [tableView endUpdates];
+    }
+    
 }
 
 - (void)tableView:(UITableView *)tableView
@@ -260,17 +282,5 @@
     [super viewWillAppear:animated];
     [[self tableView] reloadData];
 }
-
-//- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
-//{
-//    MDTreeViewCell *cell =
-//        (MDTreeViewCell *)[[self tableView]
-//                                cellForRowAtIndexPath:[NSIndexPath
-//                                                        indexPathForRow:0
-//                                                              inSection:0]];
-//    UITextField *field = [cell nodeTitleField];
-//    [field setEnabled:YES];
-//    [field becomeFirstResponder];
-//}
 
 @end

@@ -35,7 +35,8 @@
     for (MDTreeNode *node in _children)
     {
         [result addObject:node];
-        [result addObjectsFromArray:[node flatten]];
+        if ([node isExpanded])
+            [result addObjectsFromArray:[node flatten]];
     }
 
     return result;

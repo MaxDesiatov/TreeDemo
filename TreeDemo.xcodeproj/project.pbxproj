@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D1154634165035F3009B174B /* Outside copy.png in Resources */ = {isa = PBXBuildFile; fileRef = D1154633165035F3009B174B /* Outside copy.png */; };
 		D175CB6F164E70D400661645 /* MDTreeViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D175CB6E164E70D400661645 /* MDTreeViewCell.m */; };
 		D175CB71164E72CB00661645 /* MDTreeViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D175CB70164E72CA00661645 /* MDTreeViewCell.xib */; };
 		D1AA0466164C20C20085BD55 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AA0465164C20C20085BD55 /* UIKit.framework */; };
@@ -23,6 +24,7 @@
 		D1AA0497164C45940085BD55 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AA0496164C45940085BD55 /* libsqlite3.dylib */; };
 		D1AA049A164C4DAF0085BD55 /* MDTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA0499164C4DAF0085BD55 /* MDTreeNode.m */; };
 		D1AA049D164C628A0085BD55 /* MDTreeNodeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA049C164C628A0085BD55 /* MDTreeNodeStore.m */; };
+		D1AFDF81164FE9A6001C73C3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AFDF80164FE9A6001C73C3 /* QuartzCore.framework */; };
 		D1E4A566164DABDF00F07A70 /* MDDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E4A564164DABDF00F07A70 /* MDDetailsViewController.m */; };
 		D1E4A567164DABDF00F07A70 /* MDDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1E4A565164DABDF00F07A70 /* MDDetailsViewController.xib */; };
 /* End PBXBuildFile section */
@@ -52,6 +54,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D1154633165035F3009B174B /* Outside copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Outside copy.png"; sourceTree = "<group>"; };
 		D175CB6D164E70D400661645 /* MDTreeViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDTreeViewCell.h; sourceTree = "<group>"; };
 		D175CB6E164E70D400661645 /* MDTreeViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDTreeViewCell.m; sourceTree = "<group>"; };
 		D175CB70164E72CA00661645 /* MDTreeViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MDTreeViewCell.xib; sourceTree = "<group>"; };
@@ -76,6 +79,7 @@
 		D1AA0499164C4DAF0085BD55 /* MDTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDTreeNode.m; sourceTree = "<group>"; };
 		D1AA049B164C628A0085BD55 /* MDTreeNodeStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDTreeNodeStore.h; sourceTree = "<group>"; };
 		D1AA049C164C628A0085BD55 /* MDTreeNodeStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDTreeNodeStore.m; sourceTree = "<group>"; };
+		D1AFDF80164FE9A6001C73C3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D1E4A563164DABDF00F07A70 /* MDDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDetailsViewController.h; sourceTree = "<group>"; };
 		D1E4A564164DABDF00F07A70 /* MDDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDDetailsViewController.m; sourceTree = "<group>"; };
 		D1E4A565164DABDF00F07A70 /* MDDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MDDetailsViewController.xib; sourceTree = "<group>"; };
@@ -86,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1AFDF81164FE9A6001C73C3 /* QuartzCore.framework in Frameworks */,
 				D1AA0497164C45940085BD55 /* libsqlite3.dylib in Frameworks */,
 				D1AA0494164C3F590085BD55 /* libFMDB.a in Frameworks */,
 				D1AA0466164C20C20085BD55 /* UIKit.framework in Frameworks */,
@@ -100,6 +105,7 @@
 		D1AA0456164C20C10085BD55 = {
 			isa = PBXGroup;
 			children = (
+				D1154633165035F3009B174B /* Outside copy.png */,
 				D1AA0496164C45940085BD55 /* libsqlite3.dylib */,
 				D1AA046B164C20C20085BD55 /* TreeDemo */,
 				D1AA0464164C20C20085BD55 /* Frameworks */,
@@ -119,6 +125,7 @@
 		D1AA0464164C20C20085BD55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D1AFDF80164FE9A6001C73C3 /* QuartzCore.framework */,
 				D1AA0465164C20C20085BD55 /* UIKit.framework */,
 				D1AA0467164C20C20085BD55 /* Foundation.framework */,
 				D1AA0469164C20C20085BD55 /* CoreGraphics.framework */,
@@ -253,6 +260,7 @@
 				D1AA047C164C20C20085BD55 /* Default-568h@2x.png in Resources */,
 				D1E4A567164DABDF00F07A70 /* MDDetailsViewController.xib in Resources */,
 				D175CB71164E72CB00661645 /* MDTreeViewCell.xib in Resources */,
+				D1154634165035F3009B174B /* Outside copy.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,6 +370,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -381,6 +390,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

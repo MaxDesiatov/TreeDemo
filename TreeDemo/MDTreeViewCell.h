@@ -7,13 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface MDTreeViewCell : UITableViewCell
 {
+    CAShapeLayer *triangleLayer;
+    UIBezierPath *path;
     BOOL needsAdditionalIndentation;
 }
 
-@property (weak, nonatomic) IBOutlet UIView *nodeStateIndicator;
 @property (weak, nonatomic) IBOutlet UITextField *nodeTitleField;
+@property (assign) BOOL isExpanded;
+@property (assign) BOOL hasChildren;
+
+- (void)spinNodeStateIndicatorWithDuration:(float)duration;
 
 @end
