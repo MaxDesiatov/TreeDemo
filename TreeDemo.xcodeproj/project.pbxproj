@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D1154634165035F3009B174B /* Outside copy.png in Resources */ = {isa = PBXBuildFile; fileRef = D1154633165035F3009B174B /* Outside copy.png */; };
+		D115463616505681009B174B /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = D115463516505681009B174B /* README.txt */; };
 		D175CB6F164E70D400661645 /* MDTreeViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D175CB6E164E70D400661645 /* MDTreeViewCell.m */; };
 		D175CB71164E72CB00661645 /* MDTreeViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D175CB70164E72CA00661645 /* MDTreeViewCell.xib */; };
 		D1AA0466164C20C20085BD55 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AA0465164C20C20085BD55 /* UIKit.framework */; };
@@ -20,8 +21,6 @@
 		D1AA047A164C20C20085BD55 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1AA0479164C20C20085BD55 /* Default@2x.png */; };
 		D1AA047C164C20C20085BD55 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1AA047B164C20C20085BD55 /* Default-568h@2x.png */; };
 		D1AA0484164C32320085BD55 /* MDTreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA0483164C32320085BD55 /* MDTreeViewController.m */; };
-		D1AA0494164C3F590085BD55 /* libFMDB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AA0491164C3EEC0085BD55 /* libFMDB.a */; };
-		D1AA0497164C45940085BD55 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AA0496164C45940085BD55 /* libsqlite3.dylib */; };
 		D1AA049A164C4DAF0085BD55 /* MDTreeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA0499164C4DAF0085BD55 /* MDTreeNode.m */; };
 		D1AA049D164C628A0085BD55 /* MDTreeNodeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA049C164C628A0085BD55 /* MDTreeNodeStore.m */; };
 		D1AFDF81164FE9A6001C73C3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1AFDF80164FE9A6001C73C3 /* QuartzCore.framework */; };
@@ -29,32 +28,9 @@
 		D1E4A567164DABDF00F07A70 /* MDDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1E4A565164DABDF00F07A70 /* MDDetailsViewController.xib */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		D1AA048E164C3EEC0085BD55 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D1AA0485164C3EEB0085BD55 /* fmdb.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8DD76FA10486AA7600D96B5E;
-			remoteInfo = fmdb;
-		};
-		D1AA0490164C3EEC0085BD55 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D1AA0485164C3EEB0085BD55 /* fmdb.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EE4290EF12B42F870088BD94;
-			remoteInfo = FMDB;
-		};
-		D1AA0492164C3F410085BD55 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D1AA0485164C3EEB0085BD55 /* fmdb.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = EE4290EE12B42F870088BD94;
-			remoteInfo = FMDB;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		D1154633165035F3009B174B /* Outside copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Outside copy.png"; sourceTree = "<group>"; };
+		D115463516505681009B174B /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		D175CB6D164E70D400661645 /* MDTreeViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDTreeViewCell.h; sourceTree = "<group>"; };
 		D175CB6E164E70D400661645 /* MDTreeViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDTreeViewCell.m; sourceTree = "<group>"; };
 		D175CB70164E72CA00661645 /* MDTreeViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MDTreeViewCell.xib; sourceTree = "<group>"; };
@@ -73,8 +49,6 @@
 		D1AA047B164C20C20085BD55 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D1AA0482164C32320085BD55 /* MDTreeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDTreeViewController.h; sourceTree = "<group>"; };
 		D1AA0483164C32320085BD55 /* MDTreeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDTreeViewController.m; sourceTree = "<group>"; };
-		D1AA0485164C3EEB0085BD55 /* fmdb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = fmdb.xcodeproj; path = externals/fmdb/fmdb.xcodeproj; sourceTree = "<group>"; };
-		D1AA0496164C45940085BD55 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		D1AA0498164C4DAF0085BD55 /* MDTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDTreeNode.h; sourceTree = "<group>"; };
 		D1AA0499164C4DAF0085BD55 /* MDTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDTreeNode.m; sourceTree = "<group>"; };
 		D1AA049B164C628A0085BD55 /* MDTreeNodeStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDTreeNodeStore.h; sourceTree = "<group>"; };
@@ -91,8 +65,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1AFDF81164FE9A6001C73C3 /* QuartzCore.framework in Frameworks */,
-				D1AA0497164C45940085BD55 /* libsqlite3.dylib in Frameworks */,
-				D1AA0494164C3F590085BD55 /* libFMDB.a in Frameworks */,
 				D1AA0466164C20C20085BD55 /* UIKit.framework in Frameworks */,
 				D1AA0468164C20C20085BD55 /* Foundation.framework in Frameworks */,
 				D1AA046A164C20C20085BD55 /* CoreGraphics.framework in Frameworks */,
@@ -105,12 +77,11 @@
 		D1AA0456164C20C10085BD55 = {
 			isa = PBXGroup;
 			children = (
+				D115463516505681009B174B /* README.txt */,
 				D1154633165035F3009B174B /* Outside copy.png */,
-				D1AA0496164C45940085BD55 /* libsqlite3.dylib */,
 				D1AA046B164C20C20085BD55 /* TreeDemo */,
 				D1AA0464164C20C20085BD55 /* Frameworks */,
 				D1AA0462164C20C20085BD55 /* Products */,
-				D1AA0485164C3EEB0085BD55 /* fmdb.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -169,15 +140,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		D1AA0486164C3EEB0085BD55 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				D1AA048F164C3EEC0085BD55 /* fmdb */,
-				D1AA0491164C3EEC0085BD55 /* libFMDB.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -192,7 +154,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				D1AA0493164C3F410085BD55 /* PBXTargetDependency */,
 			);
 			name = TreeDemo;
 			productName = TreeDemo;
@@ -219,35 +180,12 @@
 			mainGroup = D1AA0456164C20C10085BD55;
 			productRefGroup = D1AA0462164C20C20085BD55 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = D1AA0486164C3EEB0085BD55 /* Products */;
-					ProjectRef = D1AA0485164C3EEB0085BD55 /* fmdb.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				D1AA0460164C20C20085BD55 /* TreeDemo */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		D1AA048F164C3EEC0085BD55 /* fmdb */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = fmdb;
-			remoteRef = D1AA048E164C3EEC0085BD55 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		D1AA0491164C3EEC0085BD55 /* libFMDB.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libFMDB.a;
-			remoteRef = D1AA0490164C3EEC0085BD55 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D1AA045F164C20C20085BD55 /* Resources */ = {
@@ -261,6 +199,7 @@
 				D1E4A567164DABDF00F07A70 /* MDDetailsViewController.xib in Resources */,
 				D175CB71164E72CB00661645 /* MDTreeViewCell.xib in Resources */,
 				D1154634165035F3009B174B /* Outside copy.png in Resources */,
+				D115463616505681009B174B /* README.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,14 +221,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		D1AA0493164C3F410085BD55 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = FMDB;
-			targetProxy = D1AA0492164C3F410085BD55 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D1AA046E164C20C20085BD55 /* InfoPlist.strings */ = {
