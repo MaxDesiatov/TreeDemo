@@ -148,12 +148,26 @@
         NSArray *items = [store allItems];
         MDTreeNode *n = [items objectAtIndex:[indexPath row]];
         NSLog(@"deleting row %d", [indexPath row]);
+        MDTreeViewCell *cell =
+            (MDTreeViewCell *)[tableView cellForRowAtIndexPath:indexPath];
 
-        NSArray *childrenToReload = [n flatten];
-        [store removeItem:n];
+        NSArray *childrenToReload;
+        // no need to reload children if they're removed with the parent
+        // but if they're not removed with the parent, we need to get those
+        // before changes to the store were applied
+        if ([cell isExpanded])
+        {
+            childrenToReload = [n flatten];
+            [store removeItem:n];
+        } else
+            [store removeItemWithChildren:n];
         
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                          withRowAnimation:UITableViewRowAnimationFade];
+
+        // no need to reload children if they're removed with the parent
+        if (![cell isExpanded])
+            return;
 
         NSMutableArray *indexPathsToReload = [NSMutableArray array];
         // reloading all items to get refreshed indexes
@@ -180,15 +194,32 @@
     MDTreeNodeStore *store = [MDTreeNodeStore sharedStore];
     NSArray *items = [store allItems];
     MDTreeNode *n = [items objectAtIndex:[oldPath row]];
-    NSArray *childrenToReload = [n flatten];
+    MDTreeViewCell *cell =
+        (MDTreeViewCell *)[tableView cellForRowAtIndexPath:oldPath];
 
-    [[MDTreeNodeStore sharedStore] moveItemAtRow:[oldPath row]
-                                         toIndex:[newPath row]];
-    UITableViewCell *cell =
-        [[self tableView] cellForRowAtIndexPath:oldPath];
+    NSArray *childrenToReload;
+
+    // no need to reload children if they're moved with the parent
+    // but if they're not moved with the parent, we need to get those
+    // before changes to the store were applied
+    if ([cell isExpanded])
+        childrenToReload = [n flatten];
+
+    NSInteger oldRow = [oldPath row];
+    NSInteger newRow = [newPath row];
+
+    if (![cell isExpanded])
+        [store moveItemAtRowWithChildren:oldRow toIndex:newRow];
+    else
+        [store moveItemAtRow:oldRow toIndex:newRow];
+
     [cell setIndentationLevel:[self tableView:[self tableView]
             indentationLevelForRowAtIndexPath:newPath]];
     [cell setNeedsLayout];
+
+    // no need to reload children if they're moved with the parent
+    if (![cell isExpanded])
+        return;
 
     // reloading all items to get refreshed indexes
     items = [store allItems];

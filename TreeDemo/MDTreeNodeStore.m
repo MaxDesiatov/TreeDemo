@@ -37,7 +37,6 @@
 
 - (void)removeItem:(MDTreeNode *)n
 {
-//    const int oldCount = [[self allItems] count];
     MDTreeNode *parent = [n parent];
 
     // prevent deletion of the rootNode
@@ -63,17 +62,19 @@
 
     [parentsChildren insertObjects:childrenToReparent
                          atIndexes:newIndexesOfChildrenToReparent];
-
-//    NSArray *newItems = [self allItems];
-//    const int newCount = [[self allItems] count];
-//    NSUInteger indexOfRemovedItem = [newItems indexOfObjectIdenticalTo:n];
-//    NSAssert((newCount == oldCount - 1) && indexOfRemovedItem == NSNotFound,
-//             @"broken invariants in MDTreeNodeStore's -removeItem");
 }
 
 - (void)removeItemWithChildren:(MDTreeNode *)n
 {
-    
+    MDTreeNode *parent = [n parent];
+
+    // prevent deletion of the rootNode
+    NSAssert(parent, @"MDTreeNodeStore's -removeItem: there was an attempt to \
+             remove the root node");
+
+    NSMutableArray *parentsChildren = [parent children];
+    [parentsChildren removeObjectIdenticalTo:n];
+    n = nil;
 }
 
 - (NSArray *)allItems
@@ -83,27 +84,17 @@
 
 - (MDTreeNode *)createItem
 {
-//    const int oldCount = [[self allItems] count];
     MDTreeNode *n = [MDTreeNode new];
 
     [n setParent:rootNode];
     [[rootNode children] insertObject:n atIndex:0];
-
-//    const int newCount = [[self allItems] count];
-//    NSAssert(newCount == oldCount + 1,
-//             @"broken invariant in MDTreeNodeStore's -createItem");
 
     return n;
 }
 
 - (MDTreeNode *)createChildIn:(MDTreeNode *)node
 {
-//    const int oldCount = [[self allItems] count];
     MDTreeNode *newChild = [self createChildIn:node atPosition:0];
-
-//    const int newCount = [[self allItems] count];
-//    NSAssert((newCount == oldCount + 1) && ([newChild parent] == node),
-//             @"broken invariant in MDTreeNodeStore's -createChildIn");
 
     return newChild;
 }
@@ -111,7 +102,6 @@
 - (MDTreeNode *)createChildIn:(MDTreeNode *)node
                    atPosition:(NSUInteger)position
 {
-//    const int oldCount = [[self allItems] count];
     MDTreeNode *newChild = [MDTreeNode new];
 
     [newChild setParent:node];
@@ -123,13 +113,6 @@
         [children addObject:newChild];
     else
         [children insertObject:newChild atIndex:position];
-
-//    const int newCount = [[self allItems] count];
-//    NSAssert((newCount == oldCount + 1) &&
-//                ([newChild parent] == node) &&
-//                ([[[newChild parent] children] indexOfObjectIdenticalTo:newChild] ==
-//                    position),
-//             @"broken invariant in MDTreeNodeStore's -createChildIn:atPosition:");
 
     return newChild;
 }
@@ -160,18 +143,53 @@
     int childCount = [[newParent children] count];
     int positionToPut = (to - newParentRow);
 
-    NSLog(@"-moveItemAtRow: local index is %d, the index of the last clild is %d",
+    NSLog(@"-moveItemAtRow: local index is %d, the index of the last child is %d",
           positionToPut, childCount - 1);
 
     [[self createChildIn:newParent
-              atPosition:(positionToPut > childCount ? childCount : positionToPut)] setTitle: title];
-//    NSAssert([[[self allItems] indexesOfObjectsPassingTest:^(id obj,
-//                                                             NSUInteger idx,
-//                                                             BOOL *stop)
-//             {
-//                 return (BOOL)([obj title] == title);
-//             }] containsIndex:to],
-//             @"broken invariant in MDTreeNodeStore's -moveItemAtRow:toIndex:");
+              atPosition:(positionToPut > childCount ?
+                            childCount :
+                            positionToPut)]
+                setTitle:title];
+}
+
+- (void)moveItemAtRowWithChildren:(int)from toIndex:(int)to
+{
+    if (from == to)
+        return;
+
+    NSLog(@"-moveItemAtRow invoked to move from row %d to row %d", from, to);
+    NSArray *items = [self allItems];
+    MDTreeNode *node = [items objectAtIndex:from];
+
+    MDTreeNode *oldParent = [node parent];
+    NSMutableArray *oldParentsChildren = [oldParent children];
+    [oldParentsChildren removeObjectIdenticalTo:node];
+
+    MDTreeNode *targetNode =
+    [items count] > to ? [items objectAtIndex:to] : nil;
+
+    MDTreeNode *newParent = targetNode ? [targetNode parent] : rootNode;
+    if (newParent == node)
+        newParent = rootNode;
+
+    NSMutableArray *newParentsChildren = [newParent children];
+    NSUInteger newParentRow =
+        newParent == rootNode ? 0 : [items indexOfObjectIdenticalTo:newParent];
+
+    int childCount = [newParentsChildren count];
+    NSLog(@"-moveItemAtRow: newParentRow is %d and newParent has %d children",
+          newParentRow, childCount);
+
+    int positionToPut = (to - newParentRow);
+
+    NSLog(@"-moveItemAtRow: local index is %d, the index of the last child is %d",
+          positionToPut, childCount - 1);
+
+    [newParentsChildren insertObject:node atIndex:(positionToPut > childCount ?
+                                                        childCount :
+                                                        positionToPut)];
+    [node setParent:newParent];
 }
 
 @end
